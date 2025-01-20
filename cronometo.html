@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cronômetro</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    #timer {
+      font-size: 3rem;
+      color: #333;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .start {
+      background-color: #4caf50;
+      color: white;
+    }
+
+    .stop {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cronômetro</h1>
+  <div id="timer">00:00:00</div>
+  <button class="start" onclick="startTimer()">Iniciar</button>
+  <button class="stop" onclick="stopTimer()">Parar</button>
+</body>
+</html>
