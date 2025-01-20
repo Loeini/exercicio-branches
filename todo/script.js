@@ -1,39 +1,35 @@
-// Task class to create task objects
 class Task {
-    constructor(title, assignee) {
-      this.id = Date.now().toString();
-      this.title = title;
-      this.assignee = assignee;
-      this.completed = false;
-      this.status = 'NEW';
-    }
+  constructor(title, assignee) {
+    this.id = Date.now().toString();
+    this.title = title;
+    this.assignee = assignee;
+    this.completed = false;
+    this.status = "NEW";
   }
-  
-  // TodoList class to manage tasks
-  class TodoList {
-    constructor() {
-      this.tasks = [];
-      this.init();
-    }
-  
-    init() {
-      // Add event listeners
-      document.querySelector('.btn-primary').addEventListener('click', () => this.showAddTaskModal());
-      
-      // Initialize existing checkboxes
-      document.querySelectorAll('.custom-control-input').forEach(checkbox => {
-        checkbox.addEventListener('change', (e) => this.toggleTaskComplete(e));
-      });
-  
-      // Initialize existing delete buttons
-      document.querySelectorAll('.fa-trash').forEach(button => {
-        button.addEventListener('click', (e) => this.deleteTask(e));
-      });
-    }
-  
-    showAddTaskModal() {
-      // Create modal HTML
-      const modalHtml = `
+}
+
+class TodoList {
+  constructor() {
+    this.tasks = [];
+    this.init();
+  }
+
+  init() {
+    document
+      .querySelector(".btn-primary")
+      .addEventListener("click", () => this.showAddTaskModal());
+
+    document.querySelectorAll(".custom-control-input").forEach((checkbox) => {
+      checkbox.addEventListener("change", (e) => this.toggleTaskComplete(e));
+    });
+
+    document.querySelectorAll(".fa-trash").forEach((button) => {
+      button.addEventListener("click", (e) => this.deleteTask(e));
+    });
+  }
+
+  showAddTaskModal() {
+    const modalHtml = `
         <div class="modal fade" id="addTaskModal" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
@@ -61,32 +57,29 @@ class Task {
           </div>
         </div>
       `;
-  
-      // Add modal to document
-      document.body.insertAdjacentHTML('beforeend', modalHtml);
-  
-      // Get modal instance
-      const modal = new bootstrap.Modal(document.getElementById('addTaskModal'));
-      modal.show();
-  
-      // Add save task handler
-      document.getElementById('saveTask').addEventListener('click', () => {
-        const title = document.getElementById('taskTitle').value;
-        const assignee = document.getElementById('taskAssignee').value;
-  
-        if (title && assignee) {
-          this.addTask(title, assignee);
-          modal.hide();
-          document.getElementById('addTaskModal').remove();
-        }
-      });
-    }
-  
-    addTask(title, assignee) {
-      const task = new Task(title, assignee);
-      this.tasks.push(task);
-  
-      const taskHtml = `
+
+    document.body.insertAdjacentHTML("beforeend", modalHtml);
+
+    const modal = new bootstrap.Modal(document.getElementById("addTaskModal"));
+    modal.show();
+
+    document.getElementById("saveTask").addEventListener("click", () => {
+      const title = document.getElementById("taskTitle").value;
+      const assignee = document.getElementById("taskAssignee").value;
+
+      if (title && assignee) {
+        this.addTask(title, assignee);
+        modal.hide();
+        document.getElementById("addTaskModal").remove();
+      }
+    });
+  }
+
+  addTask(title, assignee) {
+    const task = new Task(title, assignee);
+    this.tasks.push(task);
+
+    const taskHtml = `
         <li class="list-group-item" data-task-id="${task.id}">
           <div class="todo-indicator bg-info"></div>
           <div class="widget-content p-0">
@@ -113,54 +106,53 @@ class Task {
           </div>
         </li>
       `;
-  
-      const taskList = document.querySelector('.list-group');
-      taskList.insertAdjacentHTML('beforeend', taskHtml);
-  
-      // Add event listeners to new task
-      const newTaskEl = taskList.lastElementChild;
-      newTaskEl.querySelector('.custom-control-input').addEventListener('change', (e) => this.toggleTaskComplete(e));
-      newTaskEl.querySelector('.btn-outline-danger').addEventListener('click', (e) => this.deleteTask(e));
-    }
-  
-    toggleTaskComplete(event) {
-      const taskEl = event.target.closest('.list-group-item');
-      const taskId = taskEl.dataset.taskId;
-      const task = this.tasks.find(t => t.id === taskId);
-  
-      if (task) {
-        task.completed = event.target.checked;
-        if (task.completed) {
-          taskEl.classList.add('completed');
-        } else {
-          taskEl.classList.remove('completed');
-        }
+
+    const taskList = document.querySelector(".list-group");
+    taskList.insertAdjacentHTML("beforeend", taskHtml);
+
+    const newTaskEl = taskList.lastElementChild;
+    newTaskEl
+      .querySelector(".custom-control-input")
+      .addEventListener("change", (e) => this.toggleTaskComplete(e));
+    newTaskEl
+      .querySelector(".btn-outline-danger")
+      .addEventListener("click", (e) => this.deleteTask(e));
+  }
+
+  toggleTaskComplete(event) {
+    const taskEl = event.target.closest(".list-group-item");
+    const taskId = taskEl.dataset.taskId;
+    const task = this.tasks.find((t) => t.id === taskId);
+
+    if (task) {
+      task.completed = event.target.checked;
+      if (task.completed) {
+        taskEl.classList.add("completed");
+      } else {
+        taskEl.classList.remove("completed");
       }
     }
-  
-    deleteTask(event) {
-      const taskEl = event.target.closest('.list-group-item');
-      const taskId = taskEl.dataset.taskId;
-      
-      // Remove from array
-      this.tasks = this.tasks.filter(task => task.id !== taskId);
-      
-      // Remove from DOM
-      taskEl.remove();
-    }
   }
-  
-  // Add CSS for completed tasks
-  const style = document.createElement('style');
-  style.textContent = `
+
+  deleteTask(event) {
+    const taskEl = event.target.closest(".list-group-item");
+    const taskId = taskEl.dataset.taskId;
+
+    this.tasks = this.tasks.filter((task) => task.id !== taskId);
+
+    taskEl.remove();
+  }
+}
+
+const style = document.createElement("style");
+style.textContent = `
     .completed .widget-heading {
       text-decoration: line-through;
       opacity: 0.7;
     }
   `;
-  document.head.appendChild(style);
-  
-  // Initialize TodoList
-  document.addEventListener('DOMContentLoaded', () => {
-    const todoList = new TodoList();
-  });
+document.head.appendChild(style);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const todoList = new TodoList();
+});
